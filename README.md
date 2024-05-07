@@ -32,9 +32,9 @@ An expression using a code block:
     sum_(k=1)^n k = 1+2+ cdots +n=(n(n+1))/2
     ```
 
-   ``` mu
-   {(2x,+,17y,=,23),(x,-,y,=,5):}
-   ```
+    ``` mu
+    {(2x,+,17y,=,23),(x,-,y,=,5):}
+    ```
 
 ## Settings
 
