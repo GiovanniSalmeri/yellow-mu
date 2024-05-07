@@ -1,0 +1,6 @@
+/* Mu extension, https://github.com/GiovanniSalmeri/yellow-mu */
+
+math[display=block] { 
+    text-align: left; /* TODO make it work with Webkit/Blink */
+    padding: 0.5em 2em;
+}
