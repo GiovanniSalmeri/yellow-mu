@@ -25,7 +25,7 @@ class YellowMu {
         $output = null;
         if ($name=="mu" && ($type=="block" || $type=="inline" || $type=="code")) {
             list($expression) = $type=="code" ? [ $text ] : $this->yellow->toolbox->getTextArguments($text);
-            $expression = str_replace([ "%%", "%|" ], [ "%", "]" ], $expression);
+            $expression = strtr($expression, [ "%%"=>"%", "%|"=>"]" ]);
             $output .= $this->parser->parseMath($expression, $type!=="inline");
         }
         return $output;
