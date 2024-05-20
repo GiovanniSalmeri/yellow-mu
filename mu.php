@@ -15,8 +15,8 @@ class YellowMu {
     // Handle page content element
     public function onParseContentElement($page, $name, $text, $attributes, $type) {
         if (!isset($this->parser)) {
-            $useKatex = $this->yellow->system->get("muPreferKatex") && $this->yellow->extension->isExisting("math");
-            if ($useKatex) {
+            $page->useKatex = $this->yellow->system->get("muPreferKatex") && $this->yellow->extension->isExisting("math");
+            if ($page->useKatex) {
                 $this->parser = new AsciiMathHtmlTex($this->yellow->language->getText("coreDecimalSeparator"));
             } else {
                 $this->parser = new AsciiMathMlEscaped($this->yellow->language->getText("coreDecimalSeparator"));
@@ -33,8 +33,10 @@ class YellowMu {
 
     // Handle page content
     public function onParseContentHtml($page, $text) {
-        return preg_replace_callback('/<span class="'.self::ESCAPECLASS.'">(.*?)<\/span>/s', function($matches) { return htmlspecialchars_decode($matches[1]); }, $text);
-    }
+        if (isset($page->useKatex) && !$page->useKatex) {
+            return preg_replace_callback('/<span class="'.self::ESCAPECLASS.'">(.*?)<\/span>/s', function($matches) { return htmlspecialchars_decode($matches[1]); }, $text);
+        }
+     }
 
     // Handle page extra data
     public function onParsePageExtra($page, $name) {
