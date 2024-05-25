@@ -2,7 +2,7 @@
 // Mu extension, https://github.com/GiovanniSalmeri/yellow-mu
 
 class YellowMu {
-    const VERSION = "0.9.1";
+    const VERSION = "0.9.2";
     const ESCAPECLASS = "__mu__";
     public $yellow;         // access to API
 
@@ -24,19 +24,54 @@ class YellowMu {
         }
         $output = null;
         if ($name=="mu" && ($type=="block" || $type=="inline" || $type=="code")) {
-            list($expression) = $type=="code" ? [ $text ] : $this->yellow->toolbox->getTextArguments($text);
-            $expression = strtr($expression, [ "%%"=>"%", "%|"=>"]" ]);
-            $output .= $this->parser->parseMath($expression, $type!=="inline");
+            if ($type=="code") {
+                $expression = $text;
+                $label = preg_match('/(?:^|\s)#(\S+)/', $attributes, $matches) ? $matches[1] : "";
+            } else {
+                list($expression, $label) = $this->yellow->toolbox->getTextArguments($text);
+                $expression = strtr($expression , [ "%%"=>"%", "%|"=>"]" ]);
+                $label = substr($label, 0, 1)=="#" ? substr($label, 1) : "";
+            }
+            if ($type=="inline") {
+                $output = "<span class=\"mu\">".$this->parser->parseMath($expression, $type!=="inline")."</span>";
+                if ($label!=="") {
+                    $page->muLabels = true;
+                    $output = "<span class=\"mu-display\" id=\"math[##$label]\"><span class=\"mu-label\">[##$label]</span> ".$output."</span>";
+                }
+            } else {
+                $output = "<div class=\"mu\">\n".$this->parser->parseMath($expression, $type!=="inline")."\n</div>\n";
+                if ($label!=="") {
+                    $page->muLabels = true;
+                    $output = "<div class=\"mu-display\" id=\"math[##$label]\">\n<span class=\"mu-label\">[##$label]</span>\n".$output."\n</div>\n";
+                }
+            }
         }
         return $output;
     }
 
-    // Handle page content
+    // Handle page content in HTML format
     public function onParseContentHtml($page, $text) {
-        if (isset($page->useKatex) && !$page->useKatex) {
-            return preg_replace_callback('/<span class="'.self::ESCAPECLASS.'">(.*?)<\/span>/s', function($matches) { return htmlspecialchars_decode($matches[1]); }, $text);
+        $output = $text;
+        if (empty($page->useKatex)) {
+            $output = preg_replace_callback('/<span class="'.self::ESCAPECLASS.'">(.*?)<\/span>/s', function ($matches) { return htmlspecialchars_decode($matches[1]); }, $output);
         }
-     }
+        if (!empty($page->muLabels)) {
+            $ids = [];
+            $output = preg_replace_callback('/\[##(\S+?)\]/', function ($m) use (&$ids) {
+                static $currentId = 0;
+                if (!isset($ids[$m[1]])) $ids[$m[1]] = ++$currentId;
+                return $ids[$m[1]];
+            }, $output);
+            $output = preg_replace_callback('/\[#(\S+?)\]/', function ($m) use ($ids) {
+                if (isset($ids[$m[1]])) {
+                    return "<a class=\"mu-label\" href=\"#math{$ids[$m[1]]}\">{$ids[$m[1]]}</a>";
+                } else {
+                    return $m[0];
+                }
+            }, $output);
+        }
+        return $output!==$text ? $output : null;
+    }
 
     // Handle page extra data
     public function onParsePageExtra($page, $name) {
@@ -47,7 +82,6 @@ class YellowMu {
         }
         return $output;
     }
-
 }
 
 class AsciiMathMl {
@@ -860,7 +894,6 @@ THE SOFTWARE.
 }
 
 class AsciiMathMlEscaped extends AsciiMathMl {
-
     public function parseMath($str, $isDisplay = true) {
         return "<span class=\"".YellowMu::ESCAPECLASS."\">".htmlspecialchars(parent::parseMath($str, $isDisplay))."</span>";
     }
@@ -3098,7 +3131,6 @@ class AsciiMathToTex {
 }
 
 class AsciiMathHtmlTex extends AsciiMathToTex {
-
     public function parseMath($str, $isDisplay = true) {
         $content = $this->parse($str, $isDisplay);
         $tag = $isDisplay ? "div" : "span";

@@ -1,6 +1,55 @@
 /* Mu extension, https://github.com/GiovanniSalmeri/yellow-mu */
 
+:root {
+    /* TODO: variable for left align */
+    --mu-label-left-align: 0; /* 0 or 1 */
+    --mu-font-size: 1.2em;
+    --mu-label-left-delimiter: "(";
+    --mu-label-right-delimiter: ")";
+}
+span.mu, div.mu {
+    font-size: var(--mu-font-size);
+}
 math[display=block] { 
-    text-align: left; /* TODO make it work with Webkit/Blink */
+    display: block math;
+    text-align: center;
+    /*display: block;*/
+    /*text-align: left;*/
     padding: 0.5em 2em;
+}
+div.mu-display, span.mu-display { 
+    position: relative;
+}
+div.mu-display span.mu-label {
+    position: absolute;
+    right: var(--mu-label-left-align);
+    top: calc(50% - 1em);
+}
+span.mu-display span.mu-label {
+    font-size: 0.9em;
+    vertical-align: super;
+    line-height: 1.0;
+}
+div.mu-display:target::before, span.mu-display:target::before {
+    content: "";
+    position: absolute;
+    top: -0.5em;
+    left: -0.5em;
+    width: calc(100% + 1em);
+    height: calc(100% + 1em);
+    background-color: #FFFFAA;
+    border-radius: 3px;
+    z-index: -1;
+    animation: highlight 1s ease-in 1s forwards;
+}
+@keyframes highlight {
+    to {
+        background-color: inherit;
+    }
+}
+div.mu-display span.mu-label::before, span.mu-display span.mu-label::before, a.mu-label::before {
+    content: var(--mu-label-left-delimiter);
+}
+div.mu-display span.mu-label::after, span.mu-display span.mu-label::after, a.mu-label::after {
+    content: var(--mu-label-right-delimiter);
 }

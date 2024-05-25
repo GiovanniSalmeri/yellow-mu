@@ -1,4 +1,4 @@
-# Mu 0.9.1
+# Mu 0.9.2
 
 Mathematical expressions with AsciiMath.
 
@@ -15,6 +15,12 @@ With this extension you can write mathematical expressions with AsciiMath. [Asci
 The first option is to write a mathematical expression with a shortcut. Create a `[mu]` shortcut. Wrap the whole expression in quotes if there are spaces or quotes. Inside the expression use `%|` instead of `]`, and `""` instead of `"`.
 
 The second option is to write a mathematical expression with a code block. Wrap the whole expression in `` ``` `` and add the identifier `mu`.
+
+## How to cross-refer to a mathematical expression
+
+If you use a shortcut, add a label prefixed by `#` as second argument. If you use a code block, add after the identifier a label prefixed by `#` and wrapped in braces `{}`. The mathematical expression will be automatically numbered.
+
+To refer to an expression, use the label prefixed by `#` and wrapped in brackets `[]`.
 
 ## Examples
 
@@ -33,6 +39,21 @@ An expression using a code block:
     ``` mu
     {(2x,+,17y,=,23),(x,-,y,=,5):}
     ```
+
+An expression using a shortcut, numbered:
+
+    [mu x=(-b+-sqrt(b^2-4ac))/(2a) #solutions]
+    [mu "sum_(i=1)^n i^3=((n(n+1))/2)^2" #cubes]
+
+An expression using a code block, numbered:
+
+    ``` mu {#progression}
+    sum_(k=1)^n k = 1+2+ cdots +n=(n(n+1))/2
+    ```
+
+A reference to an expression:
+
+    The solutions of a quadratic equation are given by [#solutions].
 
 ## Settings
 
