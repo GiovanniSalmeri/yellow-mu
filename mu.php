@@ -36,13 +36,13 @@ class YellowMu {
                 $output = "<span class=\"mu\">".$this->parser->parseMath($expression, $type!=="inline")."</span>";
                 if ($label!=="") {
                     $page->muLabels = true;
-                    $output = "<span class=\"mu-display\" id=\"$label\"><span class=\"mu-label\">[##$label]</span> ".$output."</span>";
+                    $output = "<span class=\"mu-display\" id=\"".htmlspecialchars($label)."\"><span class=\"mu-label\">[##$label]</span> ".$output."</span>";
                 }
             } else {
                 $output = "<div class=\"mu\">\n".$this->parser->parseMath($expression, $type!=="inline")."\n</div>\n";
                 if ($label!=="") {
                     $page->muLabels = true;
-                    $output = "<div class=\"mu-display\" id=\"$label\">\n<span class=\"mu-label\">[##$label]</span>\n".$output."\n</div>\n";
+                    $output = "<div class=\"mu-display\" id=\"".htmlspecialchars($label)."\">\n<span class=\"mu-label\">[##$label]</span>\n".$output."\n</div>\n";
                 }
             }
         }
@@ -64,7 +64,7 @@ class YellowMu {
             }, $output);
             $output = preg_replace_callback('/\[#(\S+?)\]/', function ($m) use ($ids) {
                 if (isset($ids[$m[1]])) {
-                    return "<a class=\"mu-label\" href=\"#{$m[1]}\">{$ids[$m[1]]}</a>";
+                    return "<a class=\"mu-label\" href=\"#".htmlspecialchars($m[1])."\">{$ids[$m[1]]}</a>";
                 } else {
                     return $m[0];
                 }
