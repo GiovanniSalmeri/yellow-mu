@@ -3044,7 +3044,7 @@ class AsciiMathToTex {
         if ($this->right_bracket($pos)) {
             return null;
         }
-        return $this->longest([$this->other_constant($pos), $this->greek($pos), $this->name($pos), $this->number($pos), $this->arbitrary_constant($pos)], $this->scientific($pos));
+        return $this->longest([$this->other_constant($pos), $this->greek($pos), $this->name($pos), $this->number($pos), $this->arbitrary_constant($pos), $this->scientific($pos)]);
     }
 
     private function name($pos = 0) {
@@ -3122,7 +3122,7 @@ class AsciiMathToTex {
         $m = $this->match($re_science, $pos);
         if($m) {
             return [
-               "tex"=>"{$m['match'][1]} \\times 10^{$m['match'][2]}",
+               "tex"=>"{$m['match'][1]} \\times 10^{{$m['match'][2]}}",
                "pos"=>$m["pos"],
                "end"=>$m["end"]
             ];
