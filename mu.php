@@ -12,6 +12,18 @@ class YellowMu {
         $this->yellow->system->setDefault("muPreferKatex", "0");
     }
 
+    // Handle page meta data
+    public function onParseMetaData($page) {
+        if ($page==$this->yellow->page) {
+            $metaData = substr($page->rawData, 0, $page->metaDataOffsetBytes);
+            $parserData = substr($page->rawData, $page->metaDataOffsetBytes);
+            $parserData = preg_replace_callback("/\[mu((?:\s+(?:[^\]\"\s]+|\"(?:[^\"]|\"\"|\\\\\")*\"))*\s*)\]/", function($matches) {
+                return "[mu".strtr($matches[1], [ "%"=>"%%", "]"=>"%|" ])."]";
+            }, $parserData);
+            $page->rawData = $metaData.$parserData;
+        }
+    }
+
     // Handle page content element
     public function onParseContentElement($page, $name, $text, $attributes, $type) {
         if (!isset($this->parser)) {

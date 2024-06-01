@@ -12,7 +12,7 @@ Mathematical expressions with AsciiMath.
 
 With this extension you can write mathematical expressions with AsciiMath. [AsciiMath](http://asciimath.org/) is a simple mathematical markup language, akin to Markdown.
 
-The first option is to write a mathematical expression with a shortcut. Create a `[mu]` shortcut. Wrap the whole expression in quotes if there are spaces or quotes. Inside the expression use `%|` instead of `]`, and `""` instead of `"`.
+The first option is to write a mathematical expression with a shortcut. Create a `[mu]` shortcut. Wrap the whole expression in quotes if there are spaces, quotes or brackets. Inside the expression use `""` instead of `"`.
 
 The second option is to write a mathematical expression with a code block. Wrap the whole expression in `` ``` `` and add the identifier `mu`.
 
