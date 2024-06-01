@@ -3068,7 +3068,7 @@ class AsciiMathToTex {
         $re_number = '/^(\d+(?:\.\d+)?)(?:(e)([-+]?\d+))?/';
         $m = $this->match($re_number, $pos);
         if($m) {
-            $m['match'][1] = str_replace(".", $this->decimalsign, $m['match'][1]);
+            $m['match'][1] = str_replace(".", "{{$this->decimalsign}}", $m['match'][1]);
             return [
                 "tex"=> isset($m['match'][2]) ? "{$m['match'][1]}\\mathrm{e}{{$m['match'][3]}}" : $m['match'][1],
                 "pos"=>$m["pos"],
