@@ -10,6 +10,7 @@ class YellowMu {
     public function onLoad($yellow) {
         $this->yellow = $yellow;
         $this->yellow->system->setDefault("muPreferKatex", "0");
+        $this->yellow->system->setDefault("muNaturalMath", "0");
     }
 
     // Handle page meta data
@@ -43,6 +44,9 @@ class YellowMu {
                 list($expression, $label) = $this->yellow->toolbox->getTextArguments($text);
                 $expression = strtr($expression , [ "%%"=>"%", "%|"=>"]" ]);
                 $label = substr($label, 0, 1)=="#" ? substr($label, 1) : "";
+            }
+            if ($this->yellow->system->get("muNaturalMath")) {
+                $expression = $this->naturalMath($expression, $type);
             }
             if ($type=="inline") {
                 $output = "<span class=\"mu\">".$this->parser->parseMath($expression, $type!=="inline")."</span>";
@@ -93,6 +97,24 @@ class YellowMu {
             $output = "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$assetLocation}mu.css\" />\n";
         }
         return $output;
+    }
+
+    // Force slash form in inline fractions
+    private function naturalMath($expression, $type) {
+        $strings = [];
+        $expression = preg_replace_callback("/\".*?\"|\\\\?text\(.*?\)/", function ($matches) use (&$strings) {
+            $strings[] = $matches[0];
+            return "\"\"";
+        }, $expression);
+        $expression = str_replace([ "O/", "/_\\", "/_" ], [ "\emptyset", "\triangle", "\angle" ], $expression);
+        $expression = preg_replace_callback("/\/\/?/", function ($matches) use ($type) { 
+            return ($type!=="inline" && $matches[0]=="/") ? "/" : "//"; 
+        }, $expression);
+        $expression = preg_replace_callback("/\"\"/", function ($matches) use (&$strings) {
+            static $index = 0;
+            return $strings[$index++];
+        }, $expression);
+        return $expression;
     }
 }
 
