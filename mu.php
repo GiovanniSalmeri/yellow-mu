@@ -487,8 +487,8 @@ THE SOFTWARE.
         }
         // if str[0] is a digit or - return maxsubstring of digits.digits
         $this->currentSymbol = self::CONST;
-        if (preg_match('/^(\d*\.\d+|\d+\.?)/', $str, $matches)) { // rewritten, GS
-            $st = str_replace(".", $this->decimal, $matches[0]); // added, GS
+        if (preg_match('/^\d+(?:\.\d+)?(?:e[-+]?\d+)?/', $str, $matches)) { // rewritten, GS
+            $st = str_replace([ ".", "-" ], [ $this->decimal, "\u{2212}" ], $matches[0]); // added, GS
             $tagst = "mn";
         } else {
             $st = substr($str, 0, 1); // take 1 character
@@ -3044,7 +3044,7 @@ class AsciiMathToTex {
         if ($this->right_bracket($pos)) {
             return null;
         }
-        return $this->longest([$this->other_constant($pos), $this->greek($pos), $this->name($pos), $this->number($pos), $this->arbitrary_constant($pos), $this->scientific($pos)]);
+        return $this->longest([$this->other_constant($pos), $this->greek($pos), $this->name($pos), $this->number($pos), $this->arbitrary_constant($pos)]);
     }
 
     private function name($pos = 0) {
@@ -3064,9 +3064,17 @@ class AsciiMathToTex {
         }
     }
 
-    private function number($pos = 0) {
-        $re_number = '/^\\d+(' . preg_quote($this->decimalsign, '/') . '\\d+)?/';
-        return $this->literal($this->match($re_number, $pos));
+    private function number($pos = 0) {  // rewritten, GS
+        $re_number = '/^(\d+(?:\.\d+)?)(?:(e)([-+]?\d+))?/';
+        $m = $this->match($re_number, $pos);
+        if($m) {
+            $m['match'][1] = str_replace(".", $this->decimalsign, $m['match'][1]);
+            return [
+                "tex"=> isset($m['match'][2]) ? "{$m['match'][1]}\\mathrm{e}{{$m['match'][3]}}" : $m['match'][1],
+                "pos"=>$m["pos"],
+                "end"=>$m["end"]
+            ];
+        }
     }
 
     private function other_constant($pos = 0) {
@@ -3113,18 +3121,6 @@ class AsciiMathToTex {
                 'pos'=>$pos,
                 'end'=>$spos + 1,
                 'ttype'=>"arbitrary_constant"
-            ];
-        }
-    }
-
-    private function scientific($pos = 0) {
-        $re_science = '/^(\\d+(?:' . preg_quote($this->decimalsign, '/') . '\d+)?)E(-?\\d+(?:' . preg_quote($this->decimalsign, '/') . '\\d+)?)/';
-        $m = $this->match($re_science, $pos);
-        if($m) {
-            return [
-               "tex"=>"{$m['match'][1]} \\times 10^{{$m['match'][2]}}",
-               "pos"=>$m["pos"],
-               "end"=>$m["end"]
             ];
         }
     }
