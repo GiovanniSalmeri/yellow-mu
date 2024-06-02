@@ -29,6 +29,7 @@ An expression using a shortcut:
     [mu pi=3.1415926]
     [mu x=(-b+-sqrt(b^2-4ac))/(2a)]
     [mu "sum_(i=1)^n i^3=((n(n+1))/2)^2"]
+    [mu "[[a,b],[c,d]]"]
 
 An expression using a code block:
 
