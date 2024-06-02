@@ -60,11 +60,11 @@ A reference to an expression:
 The following setting can be configured in file `system/extensions/yellow-system.ini`:
 
 `MuPreferKatex` = use KaTeX for rendering AsciiMath expressions, 0 or 1; this setting only takes effect if the extension [Math](https://github.com/GiovanniSalmeri/yellow-math) is installed as well.  
-`MuNaturalMath` = force slash form in inline fractions.  
+`MuNaturalMath` = force slash form in inline fractions, 0 or 1.  
 
 ## Acknowledgements
 
-This extension is based on [asciimathml](https://github.com/asciimath/asciimathml) by Peter Jipsen and on [asciimath2tex](https://github.com/christianp/asciimath2tex) by Christian Lawson-Perfect. Thank you for the good work.
+This extension is based on [asciimathml](https://github.com/asciimath/asciimathml) by Peter Jipsen and on [asciimath2tex](https://github.com/christianp/asciimath2tex) by Christian Lawson-Perfect. Thank you for the good work. The setting `MuNaturalMath` is inspired by [Nath](https://ctan.org/pkg/nath) by Michal Marvan. Thank you for the idea.
 
 ## Developer
 
