@@ -110,7 +110,7 @@ class YellowMu {
         $expression = preg_replace_callback("/\/\/?/", function ($matches) use ($type) { 
             return ($type!=="inline" && $matches[0]=="/") ? "/" : "//"; 
         }, $expression);
-        $expression = preg_replace_callback("/\"\"/", function ($matches) use (&$strings) {
+        $expression = preg_replace_callback("/\"\"/", function ($matches) use ($strings) {
             static $index = 0;
             return $strings[$index++];
         }, $expression);
