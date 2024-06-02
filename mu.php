@@ -3106,7 +3106,8 @@ class AsciiMathToTex {
             return [
                 "tex"=> isset($m['match'][2]) ? "{$m['match'][1]}\\mathrm{e}{{$m['match'][3]}}" : $m['match'][1],
                 "pos"=>$m["pos"],
-                "end"=>$m["end"]
+                "end"=>$m["end"],
+                "ttype"=>"literal"
             ];
         }
     }
