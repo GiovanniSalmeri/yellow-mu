@@ -2,7 +2,7 @@
 // Mu extension, https://github.com/GiovanniSalmeri/yellow-mu
 
 class YellowMu {
-    const VERSION = "0.9.2";
+    const VERSION = "1.0.0";
     const ESCAPECLASS = "__mu__";
     public $yellow;         // access to API
 
@@ -94,7 +94,7 @@ class YellowMu {
         $output = null;
         if ($name=="header") {
             $assetLocation = $this->yellow->system->get("coreServerBase").$this->yellow->system->get("coreAssetLocation");
-            $output = "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$assetLocation}mu.css\" />\n";
+            $output = "<link rel=\"stylesheet\" media=\"all\" href=\"{$assetLocation}mu.css\" />\n";
         }
         return $output;
     }

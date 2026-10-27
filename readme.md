@@ -1,8 +1,8 @@
-# Mu 0.9.2
+# Mu 1.0.0
 
-Mathematical expressions with AsciiMath.
+Mathematical expressions with AsciiMath. Developed by Giovanni Salmeri.
 
-<p align="center"><img src="SCREENSHOT.png" alt="Screenshot"></p>
+<p align="center"><img src="screenshot.png" alt="Screenshot"></p>
 
 ## How to install an extension
 
@@ -65,8 +65,6 @@ The following setting can be configured in file `system/extensions/yellow-system
 
 ## Acknowledgements
 
-This extension is based on [asciimathml](https://github.com/asciimath/asciimathml) by Peter Jipsen and on [asciimath2tex](https://github.com/christianp/asciimath2tex) by Christian Lawson-Perfect. Thank you for the good work. The setting `MuNaturalMath` is inspired by [Nath](https://ctan.org/pkg/nath) by Michal Marvan. Thank you for the idea.
+This extension is based on [asciimathml](https://github.com/asciimath/asciimathml) by Peter Jipsen and on [asciimath2tex](https://github.com/christianp/asciimath2tex) by Christian Lawson-Perfect.  Thank you for the useful libraries. The setting `MuNaturalMath` is inspired by [Nath](https://ctan.org/pkg/nath) by Michal Marvan. Thank you for the idea.
 
-## Developer
-
-Giovanni Salmeri. [Get help](https://datenstrom.se/yellow/help/).
+Do you have questions? [Get help](https://datenstrom.se/yellow/help/).
